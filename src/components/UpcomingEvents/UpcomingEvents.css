@@ -1,0 +1,147 @@
+.upcoming-events-page {
+  min-height: 100vh;
+  background: linear-gradient(to bottom, #1a1a2e, #16213e);
+  color: white;
+}
+
+.upcoming-events-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 6rem 2rem 2rem;
+}
+
+.upcoming-events-container h1 {
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+  text-align: center;
+  color: #4cc9f0;
+  position: relative;
+  padding-bottom: 1rem;
+}
+
+.upcoming-events-container h1:after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  height: 3px;
+  background: linear-gradient(to right, #4cc9f0, #f72585);
+}
+
+.upcoming-events-content {
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  padding: 2rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  margin-bottom: 30px;
+}
+
+.upcoming-events-content p {
+  margin-bottom: 1.5rem;
+  line-height: 1.8;
+  font-size: 1.1rem;
+  letter-spacing: 0.5px;
+}
+
+.upcoming-events-content p:last-child {
+  margin-bottom: 0;
+}
+
+@media (max-width: 768px) {
+  .upcoming-events-container {
+    padding: 5rem 1rem 1rem;
+  }
+  
+  .upcoming-events-container h1 {
+    font-size: 2rem;
+  }
+  
+  .upcoming-events-content p {
+    font-size: 1rem;
+  }
+}
+
+.add-event-button {
+  background-color: #4a90e2;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 20px auto;
+  display: block;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.add-event-button:hover {
+  background-color: #357ab8;
+  transform: translateY(-2px);
+}
+
+.add-event-form {
+  background-color: rgba(255, 255, 255, 0.1);
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  margin: 20px 0;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.add-event-form h2 {
+  text-align: center;
+  color: #4cc9f0;
+  margin-bottom: 20px;
+}
+
+.add-event-form input,
+.add-event-form textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  background-color: rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
+.add-event-form textarea {
+  resize: vertical;
+  height: 100px;
+}
+
+.submit-button {
+  background-color: #4a90e2;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100%;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.submit-button:hover {
+  background-color: #357ab8;
+  transform: translateY(-2px);
+}
+
+.delete-button {
+  background-color: #d9534f;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.delete-button:hover {
+  background-color: #c9302c; /* Darker red for hover effect */
+  transform: translateY(-2px); /* Slight lift effect */
+} 

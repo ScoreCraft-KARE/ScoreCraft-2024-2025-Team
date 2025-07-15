@@ -1,0 +1,374 @@
+.team-member-card {
+  background-color: transparent;
+  perspective: 1000px;
+  height: 450px;
+  width: 100%;
+  cursor: pointer;
+}
+
+.card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.8s;
+  transform-style: preserve-3d;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+}
+.linkedin-overlay{
+  color: #4a90e2;
+}
+/* Improve card flip animation */
+.team-member-card:hover .card-inner {
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.team-member-card.flipped .card-inner {
+  transform: rotateY(180deg);
+}
+
+.card-front, .card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.card-front {
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+}
+
+.card-back {
+  background-color: white;
+  transform: rotateY(180deg);
+  padding: 25px;
+  overflow-y: auto;
+}
+
+/* Front card styling */
+.member-image {
+  position: relative;
+  height: 250px;
+  overflow: hidden;
+}
+
+.member-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.team-member-card:hover .member-image img {
+  transform: scale(1.05);
+}
+
+.image-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.team-member-card:hover .image-overlay {
+  opacity: 1;
+}
+
+.view-details-btn {
+  background-color: rgba(255, 255, 255, 0.9);
+  color: #333;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 30px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  transform: translateY(20px);
+  opacity: 0;
+}
+
+.team-member-card:hover .view-details-btn {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.view-details-btn:hover {
+  background-color: white;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.member-info {
+  padding: 20px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(to bottom, #ffffff, #f9f9f9);
+}
+
+.member-name {
+  font-size: 1.5rem;
+  margin-bottom: 5px;
+  color: #333;
+  position: relative;
+  display: inline-block;
+}
+
+.member-name:after {
+  content: '';
+  position: absolute;
+  width: 50px;
+  height: 3px;
+  background-color: #4a90e2;
+  bottom: -8px;
+  left: 0;
+}
+
+.member-position {
+  font-size: 1rem;
+  color: #666;
+  margin-bottom: 15px;
+  font-style: italic;
+}
+
+.member-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: auto;
+}
+
+.skill-tag {
+  background-color: #f0f8ff;
+  color: #4a90e2;
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  border: 1px solid #e0e0ff;
+}
+
+/* Back card styling */
+.close-btn {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: rgba(255, 255, 255, 0.8);
+  border: none;
+  font-size: 1.5rem;
+  color: #555;
+  cursor: pointer;
+  z-index: 10;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.close-btn:hover {
+  background-color: #f0f0f0;
+  color: #333;
+}
+
+.member-details {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.member-header {
+  margin-bottom: 15px;
+  border-bottom: 2px solid #f0f0f0;
+  padding-bottom: 10px;
+}
+
+.member-details h4 {
+  color: #4a90e2;
+  margin: 15px 0 8px;
+  font-size: 1.1rem;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 5px;
+}
+
+.member-bio-container, .member-achievements, .member-skills {
+  margin-bottom: 15px;
+}
+
+.member-bio {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: #555;
+}
+
+.skills-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.read-more {
+  background: none;
+  border: none;
+  color: #4a90e2;
+  cursor: pointer;
+  font-weight: 600;
+  padding: 5px 0;
+  margin-top: 5px;
+  font-size: 0.9rem;
+}
+
+.read-more:hover {
+  text-decoration: underline;
+}
+
+.social-links {
+  display: flex;
+  gap: 15px;
+  margin-top: auto;
+  padding-top: 20px;
+  justify-content: center;
+}
+
+.social-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  color: white;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  font-size: 1.2rem;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+}
+
+.linkedin {
+  background-color: #0077b5;
+}
+
+.github {
+  background-color: #333;
+}
+
+.twitter {
+  background-color: #1da1f2;
+}
+
+.email {
+  background-color: #ea4335;
+}
+
+.social-link:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
+
+.no-member {
+  padding: 20px;
+  text-align: center;
+  color: #666;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Animation for card appearance */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.team-list-item {
+  animation: fadeIn 0.5s ease forwards;
+  opacity: 0;
+}
+
+/* Stagger the animations */
+.team-list-item:nth-child(1) { animation-delay: 0.1s; }
+.team-list-item:nth-child(2) { animation-delay: 0.2s; }
+.team-list-item:nth-child(3) { animation-delay: 0.3s; }
+.team-list-item:nth-child(4) { animation-delay: 0.4s; }
+.team-list-item:nth-child(5) { animation-delay: 0.5s; }
+.team-list-item:nth-child(6) { animation-delay: 0.6s; }
+.team-list-item:nth-child(7) { animation-delay: 0.7s; }
+.team-list-item:nth-child(8) { animation-delay: 0.8s; }
+
+.mentor-card {
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  align-items: center;
+  text-align: left;
+  padding: 15px;
+  margin: 5px;
+  cursor: pointer;
+  width: 350px;
+}
+
+.mentor-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+}
+
+.mentor-image-container {
+  grid-column: 1;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-right: 15px;
+  border: 2px solid #4cc9f0;
+}
+
+.mentor-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.mentor-info {
+  grid-column: 2;
+  padding: 10px;
+}
+
+.mentor-name {
+  font-size: 1.4rem;
+  color: #333;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.mentor-position {
+  font-size: 1rem;
+  color: #4a90e2;
+  margin-bottom: 5px;
+  font-style: italic;
+}
+
+.mentor-description {
+  font-size: 0.9rem;
+  color: #555;
+  margin-top: 5px;
+}

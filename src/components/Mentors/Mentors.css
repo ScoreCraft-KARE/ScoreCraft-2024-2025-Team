@@ -1,0 +1,134 @@
+.core-team {
+    padding: 2rem;
+  }
+  
+  .core-team h2 {
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+  
+  .core-team-page {
+    min-height: 100vh;
+    background: linear-gradient(to bottom, #1a1a2e, #16213e);
+    color: white;
+  }
+  .mentors-page{
+    margin-top: 100px;
+   
+  }
+  .core-team-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 6rem 2rem 2rem;
+  }
+  
+  .core-team-container h1 {
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    text-align: center;
+    color: #4cc9f0;
+    position: relative;
+    padding-bottom: 1rem;
+  }
+  
+  .core-team-container h1:after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 3px;
+    background: linear-gradient(to right, #4cc9f0, #f72585);
+  }
+  
+  .team-description {
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    padding: 2rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .team-description p {
+    margin-bottom: 1.5rem;
+    line-height: 1.8;
+    font-size: 1.1rem;
+    letter-spacing: 0.5px;
+  }
+  
+  .team-description p:last-child {
+    margin-bottom: 0;
+  }
+  
+  @media (max-width: 768px) {
+    .core-team-container {
+      padding: 5rem 1rem 1rem;
+    }
+    
+    .core-team-container h1 {
+      font-size: 2rem;
+    }
+    
+    .team-description p {
+      font-size: 1rem;
+    }
+  }
+  
+  .mentors-page {
+    padding: 60px 0;
+    background-color: #f9f9f9;
+  }
+  
+  .mentors-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+  
+  .mentors-container h1 {
+    text-align: center;
+    margin-bottom: 40px;
+    font-size: 2.5rem;
+    color: #333;
+  }
+  
+  .mentors-content {
+    text-align: center;
+    margin-bottom: 40px;
+    font-size: 1.2rem;
+    color: #555;
+  }
+  
+  .team-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 30px;
+  }
+  
+  .team-list-item {
+    display: flex;
+    height: 100%;
+  }
+  
+  .loader-container, .error {
+    text-align: center;
+    padding: 40px;
+    font-size: 1.2rem;
+    color: #666;
+  }
+  
+  .error {
+    color: #d9534f;
+  }
+  
+  @media (max-width: 768px) {
+    .team-list {
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    }
+  }
+  

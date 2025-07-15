@@ -14,8 +14,7 @@ function ContactUs() {
             feel free to reach out to us.
           </p>
           <p>
-            Email: contact@scorecraft.com<br />
-            Phone: (123) 456-7890
+            Email: scorecraft@klu.ac.in<br />
           </p>
           <form className="contact-us-form">
             <input type="text" placeholder="Your Name" required />
@@ -26,10 +25,10 @@ function ContactUs() {
           <div className="contact-us-social">
             <p>Connect with us:</p>
             <ul>
-              <li><a href="https://www.linkedin.com/in/yourprofile" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
-              <li><a href="https://twitter.com/yourprofile" target="_blank" rel="noopener noreferrer">Twitter</a></li>
-              <li><a href="https://wa.me/1234567890" target="_blank" rel="noopener noreferrer">WhatsApp</a></li>
-              <li><a href="mailto:yourname@gmail.com">Gmail</a></li>
+              <li><a href="https://www.linkedin.com/in/scorecraftkare/" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
+              <li><a href="https://x.com/scorecraftKARE" target="_blank" rel="noopener noreferrer">Twitter</a></li>
+              <li><a href="mailto:scorecraft@klu.ac.in" target="_blank" rel="noopener noreferrer">Gmail</a></li>
+              <li><a href="https://www.instagram.com/scorecraftkare/" target="_blank" rel="noopener noreferrer">Instagram</a></li>
             </ul>
           </div>
         </div>

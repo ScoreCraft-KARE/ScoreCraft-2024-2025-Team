@@ -1,255 +1,157 @@
 import React, { useState, useEffect } from 'react';
-import Header from '../Header/Header';
 import { upcomingEvents as upcomingEventsAPI } from '../../services/supabase';
 import './UpcomingEvents.css';
 import EventsDetails from '../EventsDetails/EventsDetails';
-import Modal from '../Modal/Modal';
+import EventModal from '../Modal/EventModal';
 
 function UpcomingEvents({ isLoggedIn }) {
   const [upcomingEvents, setUpcomingEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedEventId, setSelectedEventId] = useState(null);
-  const [newEvent, setNewEvent] = useState({
-    heading: '',
-    description: '',
-    image: '',
-    date: ''
-  });
-  const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedEvent, setSelectedEvent] = useState(null);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedEvent, setEditedEvent] = useState(null);
 
+  // Fetch upcoming events
   useEffect(() => {
-    const fetchUpcomingEvents = async () => {
-      try {
-        setLoading(true);
-        const data = await upcomingEventsAPI.getAll();
-        setUpcomingEvents(data);
-        setLoading(false);
-      } catch (err) {
-        setError('Failed to fetch upcoming events');
-        setLoading(false);
-        console.error('Error fetching upcoming events:', err);
-      }
-    };
-
     fetchUpcomingEvents();
   }, []);
 
+  const fetchUpcomingEvents = async () => {
+    try {
+      setLoading(true);
+      const data = await upcomingEventsAPI.getAll();
+      setUpcomingEvents(data.sort((a, b) => a.date.localeCompare(b.date)));
+      setLoading(false);
+    } catch (err) {
+      setError('Failed to fetch upcoming events');
+      setLoading(false);
+      console.error('Error fetching upcoming events:', err);
+    }
+  };
+
+  // Check for completed events periodically - admin only
   useEffect(() => {
+    if (!isLoggedIn) return;
+
     const moveCompletedEvents = async () => {
       try {
         await upcomingEventsAPI.moveCompletedEvents();
-        // Refresh the list of upcoming events
-        const data = await upcomingEventsAPI.getAll();
-        setUpcomingEvents(data);
+        await fetchUpcomingEvents();
       } catch (err) {
         console.error('Error moving completed events:', err);
       }
     };
 
-    const interval = setInterval(moveCompletedEvents, 60000); // Check every minute
+    moveCompletedEvents(); // Run immediately
+    const interval = setInterval(moveCompletedEvents, 24 * 60 * 60 * 1000); // Check daily
+
     return () => clearInterval(interval);
-  }, []);
+  }, [isLoggedIn]);
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setNewEvent({ ...newEvent, [name]: value });
-  };
-
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setSelectedImage(file);
-      
-      // Create a temporary URL for preview
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        // Just set the file object for now, we'll upload when form is submitted
-        console.log("File selected and ready for upload");
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const handleAddEvent = async (e) => {
-    e.preventDefault();
-    const eventDate = new Date(newEvent.date);
-    const now = new Date();
-
-    if (eventDate.setHours(0, 0, 0, 0) < now.setHours(0, 0, 0, 0)) {
-      alert('You cannot add an event with a past date. Please select a future date.');
-      return;
-    }
-
-    if (!selectedImage) {
-      setError('Please select an image');
-      return;
-    }
-
-    try {
-      // Upload image first
-      const formData = new FormData();
-      formData.append('file', selectedImage);
-      formData.append('upload_preset', 'ml_default'); // Make sure this exists in Cloudinary
-
-      console.log('Uploading image to Cloudinary...');
-      console.log('File name:', selectedImage.name);
-      console.log('File size:', selectedImage.size);
-      console.log('Upload preset:', 'ml_default');
-      
-      // Use fetch instead of axios for better error handling
-      const uploadResponse = await fetch(
-        'https://api.cloudinary.com/v1_1/dbroxheos/upload',
-        {
-          method: 'POST',
-          body: formData,
-        }
-      );
-      
-      const responseText = await uploadResponse.text();
-      console.log('Raw response:', responseText);
-      
-      if (!uploadResponse.ok) {
-        let errorDetail;
-        try {
-          errorDetail = JSON.parse(responseText).error?.message || 'Unknown error';
-        } catch (e) {
-          errorDetail = responseText || 'No error details available';
-        }
-        throw new Error(`Upload failed with status: ${uploadResponse.status}. Details: ${errorDetail}`);
-      }
-      
-      const uploadData = JSON.parse(responseText);
-      const imageUrl = uploadData.secure_url;
-      
-      console.log('Image uploaded successfully:', imageUrl);
-      
-      // Now submit the form with the image URL
-      const eventData = {
-        ...newEvent,
-        image: imageUrl
-      };
-      
-      const newEventData = await upcomingEventsAPI.create(eventData);
-      setUpcomingEvents([...upcomingEvents, newEventData]);
-      setNewEvent({ heading: '', description: '', image: '', date: '' });
-      setSelectedImage(null);
-      setError(null);
-    } catch (err) {
-      console.error('Error in submission:', err);
-      setError(`Failed to process: ${err.message}`);
-    }
-  };
-
-  const openModal = (id) => {
-    setSelectedEventId(id);
+  // Admin functions - only available when logged in
+  const handleAddEvent = () => {
+    if (!isLoggedIn) return;
+    setSelectedEvent(null);
+    setIsEditing(false);
+    setEditedEvent({
+      title: '',
+      description: '',
+      date: '',
+      image_url: ''
+    });
     setIsModalOpen(true);
   };
 
-  const closeModal = () => {
-    setIsModalOpen(false);
-    setSelectedEventId(null);
+  const handleEditEvent = (event) => {
+    if (!isLoggedIn) return;
+    setSelectedEvent(event);
+    setIsEditing(true);
+    setEditedEvent(event);
+    setIsModalOpen(true);
   };
 
-  const handleDelete = async () => {
+  const handleDeleteEvent = async (eventId) => {
+    if (!isLoggedIn) return;
+    if (window.confirm('Are you sure you want to delete this event?')) {
+      try {
+        await upcomingEventsAPI.admin.delete(eventId);
+        fetchUpcomingEvents(); // Refresh the list
+      } catch (err) {
+        console.error('Error deleting event:', err);
+        alert('Failed to delete event');
+      }
+    }
+  };
+
+  const handleSaveEvent = async (event) => {
+    if (!isLoggedIn) return;
     try {
-      await upcomingEventsAPI.delete(selectedEventId);
-      setUpcomingEvents(upcomingEvents.filter(event => event.id !== selectedEventId));
-      closeModal();
+      if (isEditing) {
+        await upcomingEventsAPI.admin.update(selectedEvent.id, event);
+      } else {
+        await upcomingEventsAPI.admin.create(event);
+      }
+      setIsModalOpen(false);
+      fetchUpcomingEvents(); // Refresh the list
     } catch (err) {
-      console.error('Error deleting event:', err);
-      setError('Failed to delete event');
+      console.error('Error saving event:', err);
+      alert('Failed to save event');
     }
   };
 
   return (
     <div className="upcoming-events-page">
-      <Modal
-        isOpen={isModalOpen}
-        onClose={closeModal}
-        onConfirm={handleDelete}
-        message="Are you sure you want to delete this upcoming event?"
-      />
       <div className="upcoming-events-container">
         <h1>Upcoming Events</h1>
-        <div className="upcoming-events-content">
-          <p>
-            Get ready for our exciting lineup of upcoming events. Mark your calendars and don't miss out!
-          </p>
-          <p>
-            We're constantly planning new and innovative events to bring our community together.
-            Check back regularly for updates.
-          </p>
-        </div>
         {isLoggedIn && (
-          <form className="add-event-form" onSubmit={handleAddEvent}>
-            <h2>Add New Event</h2>
-            <input
-              type="text"
-              name="heading"
-              placeholder="Event Heading"
-              value={newEvent.heading}
-              onChange={handleInputChange}
-              required
-            />
-            <textarea
-              name="description"
-              placeholder="Event Description"
-              value={newEvent.description}
-              onChange={handleInputChange}
-              required
-            />
-            <div className="image-upload-container">
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleImageChange}
-                className="image-input"
-                required
-              />
-              {selectedImage && (
-                <div className="image-preview">
-                  <img src={URL.createObjectURL(selectedImage)} alt="Preview" />
-                </div>
-              )}
-            </div>
-            <input
-              type="date"
-              name="date"
-              value={newEvent.date}
-              onChange={handleInputChange}
-              required
-            />
-            <button type="submit" className="submit-button">Add Event</button>
-          </form>
-        )}
-        {loading ? (
-          <div className="loader-container">
-            <div className="spinner-loader">
-              <div className="spinner-inner"></div>
-            </div>
-            <p>Loading upcoming events...</p>
+          <div className="admin-controls">
+            <button onClick={handleAddEvent} className="add-event-button">
+              Add New Event
+            </button>
           </div>
-        ) : error ? (
-          <div className="error">{error}</div>
-        ) : (
-          <ul className="events-list">
-            {upcomingEvents.map((event) => (
-              <li key={event.id} className="events-list-item">
-                <EventsDetails event={event} />
-                {isLoggedIn && (
-                  <button onClick={() => openModal(event.id)} className="delete-button">
-                    Delete
-                  </button>
-                )}
-              </li>
-            ))}
-          </ul>
         )}
+        <div className="upcoming-events-content">
+          {loading ? (
+            <div className="loader-container">
+              <div className="spinner-loader">
+                <div className="spinner-inner"></div>
+              </div>
+              <p>Loading upcoming events...</p>
+            </div>
+          ) : error ? (
+            <div className="error">{error}</div>
+          ) : upcomingEvents.length === 0 ? (
+            <p className="no-events">No upcoming events to display.</p>
+          ) : (
+            <div className="events-grid">
+              {upcomingEvents.map((event) => (
+                <div key={event.id} className="event-card">
+                  <EventsDetails event={event} />
+                  {isLoggedIn && (
+                    <div className="admin-actions">
+                      <button onClick={() => handleEditEvent(event)}>Edit</button>
+                      <button onClick={() => handleDeleteEvent(event.id)}>Delete</button>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
+
+      {isModalOpen && (
+        <EventModal
+          onClose={() => setIsModalOpen(false)}
+          onSave={handleSaveEvent}
+          initialData={editedEvent}
+          isEditing={isEditing}
+        />
+      )}
     </div>
   );
 }
 
-export default UpcomingEvents; 
+export default UpcomingEvents;

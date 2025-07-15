@@ -1,4 +1,5 @@
 import { createClient } from '@supabase/supabase-js'
+import Cookies from 'js-cookie'
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
@@ -20,86 +21,6 @@ export const coreMembers = {
     
     if (error) throw error
     return data
-  },
-
-  // Add a new core member
-  async create(member) {
-    const { data, error } = await supabase
-      .from('core_members')
-      .insert([member])
-      .select()
-    
-    if (error) throw error
-    return data[0]
-  },
-
-  // Update a core member
-  async update(id, updates) {
-    const { data, error } = await supabase
-      .from('core_members')
-      .update(updates)
-      .eq('id', id)
-      .select()
-    
-    if (error) throw error
-    return data[0]
-  },
-
-  // Delete a core member
-  async delete(id) {
-    const { error } = await supabase
-      .from('core_members')
-      .delete()
-      .eq('id', id)
-    
-    if (error) throw error
-  }
-}
-
-// Team Members API
-export const teamMembers = {
-  // Get all team members
-  async getAll() {
-    const { data, error } = await supabase
-      .from('team_members')
-      .select('*')
-      .order('id', { ascending: true })
-    
-    if (error) throw error
-    return data
-  },
-
-  // Add a new team member
-  async create(member) {
-    const { data, error } = await supabase
-      .from('team_members')
-      .insert([member])
-      .select()
-    
-    if (error) throw error
-    return data[0]
-  },
-
-  // Update a team member
-  async update(id, updates) {
-    const { data, error } = await supabase
-      .from('team_members')
-      .update(updates)
-      .eq('id', id)
-      .select()
-    
-    if (error) throw error
-    return data[0]
-  },
-
-  // Delete a team member
-  async delete(id) {
-    const { error } = await supabase
-      .from('team_members')
-      .delete()
-      .eq('id', id)
-    
-    if (error) throw error
   }
 }
 
@@ -114,45 +35,12 @@ export const mentors = {
     
     if (error) throw error
     return data
-  },
-
-  // Add a new mentor
-  async create(mentor) {
-    const { data, error } = await supabase
-      .from('mentors')
-      .insert([mentor])
-      .select()
-    
-    if (error) throw error
-    return data[0]
-  },
-
-  // Update a mentor
-  async update(id, updates) {
-    const { data, error } = await supabase
-      .from('mentors')
-      .update(updates)
-      .eq('id', id)
-      .select()
-    
-    if (error) throw error
-    return data[0]
-  },
-
-  // Delete a mentor
-  async delete(id) {
-    const { error } = await supabase
-      .from('mentors')
-      .delete()
-      .eq('id', id)
-    
-    if (error) throw error
   }
 }
 
 // Events API
 export const events = {
-  // Get all events
+  // Get all events (public)
   async getAll() {
     const { data, error } = await supabase
       .from('events')
@@ -163,43 +51,46 @@ export const events = {
     return data
   },
 
-  // Add a new event
-  async create(event) {
-    const { data, error } = await supabase
-      .from('events')
-      .insert([event])
-      .select()
-    
-    if (error) throw error
-    return data[0]
-  },
+  // Admin-only functions
+  admin: {
+    // Add a new event
+    async create(event) {
+      const { data, error } = await supabase
+        .from('events')
+        .insert([event])
+        .select()
+      
+      if (error) throw error
+      return data[0]
+    },
 
-  // Update an event
-  async update(id, updates) {
-    const { data, error } = await supabase
-      .from('events')
-      .update(updates)
-      .eq('id', id)
-      .select()
-    
-    if (error) throw error
-    return data[0]
-  },
+    // Update an event
+    async update(id, updates) {
+      const { data, error } = await supabase
+        .from('events')
+        .update(updates)
+        .eq('id', id)
+        .select()
+      
+      if (error) throw error
+      return data[0]
+    },
 
-  // Delete an event
-  async delete(id) {
-    const { error } = await supabase
-      .from('events')
-      .delete()
-      .eq('id', id)
-    
-    if (error) throw error
+    // Delete an event
+    async delete(id) {
+      const { error } = await supabase
+        .from('events')
+        .delete()
+        .eq('id', id)
+      
+      if (error) throw error
+    }
   }
 }
 
 // Upcoming Events API
 export const upcomingEvents = {
-  // Get all upcoming events
+  // Get all upcoming events (public)
   async getAll() {
     const { data, error } = await supabase
       .from('upcomming_events')
@@ -210,40 +101,43 @@ export const upcomingEvents = {
     return data
   },
 
-  // Add a new upcoming event
-  async create(event) {
-    const { data, error } = await supabase
-      .from('upcomming_events')
-      .insert([event])
-      .select()
-    
-    if (error) throw error
-    return data[0]
+  // Admin-only functions
+  admin: {
+    // Add a new upcoming event
+    async create(event) {
+      const { data, error } = await supabase
+        .from('upcomming_events')
+        .insert([event])
+        .select()
+      
+      if (error) throw error
+      return data[0]
+    },
+
+    // Update an upcoming event
+    async update(id, updates) {
+      const { data, error } = await supabase
+        .from('upcomming_events')
+        .update(updates)
+        .eq('id', id)
+        .select()
+      
+      if (error) throw error
+      return data[0]
+    },
+
+    // Delete an upcoming event
+    async delete(id) {
+      const { error } = await supabase
+        .from('upcomming_events')
+        .delete()
+        .eq('id', id)
+      
+      if (error) throw error
+    }
   },
 
-  // Update an upcoming event
-  async update(id, updates) {
-    const { data, error } = await supabase
-      .from('upcomming_events')
-      .update(updates)
-      .eq('id', id)
-      .select()
-    
-    if (error) throw error
-    return data[0]
-  },
-
-  // Delete an upcoming event
-  async delete(id) {
-    const { error } = await supabase
-      .from('upcomming_events')
-      .delete()
-      .eq('id', id)
-    
-    if (error) throw error
-  },
-
-  // Move completed upcoming events to events table
+  // Move completed events (admin only)
   async moveCompletedEvents() {
     const today = new Date().toISOString().split('T')[0]
     
@@ -276,35 +170,7 @@ export const upcomingEvents = {
   }
 }
 
-// Admin Authentication
-export const auth = {
-  // Simple admin login (replace with Supabase auth if needed)
-  async login(username, password) {
-    const adminUsername = import.meta.env.VITE_ADMIN_USERNAME
-    const adminPassword = import.meta.env.VITE_ADMIN_PASSWORD
-    
-    if (username === adminUsername && password === adminPassword) {
-      // Generate a simple token (in production, use proper JWT)
-      const token = btoa(`${username}:${Date.now()}`)
-      return { success: true, token, message: 'Hello Admin, welcome!' }
-    } else {
-      throw new Error('Invalid username or password')
-    }
-  },
-
-  // Check if user is authenticated
-  isAuthenticated() {
-    // Check for token in localStorage or cookie
-    return !!localStorage.getItem('authToken')
-  },
-
-  // Logout
-  logout() {
-    localStorage.removeItem('authToken')
-  }
-}
-
-// Contact submissions (if needed)
+// Contact Form API
 export const contactSubmissions = {
   // Submit a contact form
   async create(submission) {
@@ -315,21 +181,54 @@ export const contactSubmissions = {
     
     if (error) throw error
     return data[0]
-  },
-
-  // Get all contact submissions (admin only)
-  async getAll() {
-    const { data, error } = await supabase
-      .from('contact_submissions')
-      .select('*')
-      .order('created_at', { ascending: false })
-    
-    if (error) throw error
-    return data
   }
 }
 
-// Test connection
+// Admin Authentication API
+export const adminAuth = {
+  async login(username, password) {
+    const { data, error } = await supabase
+      .from('admin_users')
+      .select('*')
+      .eq('username', username)
+      .eq('password', password)
+      .single();
+    
+    if (error) throw error;
+    if (!data) throw new Error('Invalid credentials');
+    
+    return data;
+  },
+
+  async verifyToken() {
+    const token = Cookies.get('admin_token');
+    if (!token) return false;
+
+    try {
+      // Try to decode the token to get the username
+      const [username] = atob(token).split(':');
+      
+      // Check if this username exists in admin_users
+      const { data, error } = await supabase
+        .from('admin_users')
+        .select('username')
+        .eq('username', username)
+        .single();
+      
+      if (error || !data) {
+        Cookies.remove('admin_token');
+        return false;
+      }
+      
+      return true;
+    } catch (error) {
+      Cookies.remove('admin_token');
+      return false;
+    }
+  }
+}
+
+// Test connection (useful for debugging)
 export const testConnection = async () => {
   try {
     const { data, error } = await supabase

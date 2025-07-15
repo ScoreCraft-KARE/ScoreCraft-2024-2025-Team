@@ -160,7 +160,7 @@ const CoreTeam = () => {
     },
     {
       name: "P.Kiran Kumar",
-      role: "Supporting Member",
+      role: "Organiser",
       linkedin: "https://www.linkedin.com/in/peruvaila-kirankumar-5282a5252",
       image: "https://i.ibb.co/Y7SzX8Z4/Kiran.jpg",
       delay: 2.2

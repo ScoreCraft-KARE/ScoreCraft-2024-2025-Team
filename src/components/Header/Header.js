@@ -21,9 +21,10 @@ function Header({ isLoggedIn, setIsLoggedIn }) {
   };
 
   const handleLogout = () => {
-    Cookies.remove('jwt'); // Remove JWT from cookies
+    Cookies.remove('admin_token'); // Remove admin token from cookies
+    localStorage.removeItem('authToken'); // Clear any stored auth token
     setIsLoggedIn(false);
-    navigate('/');
+    navigate('/admin-login'); // Redirect to login page after logout
   };
 
   const handleClickOutside = (event) => {
@@ -154,10 +155,8 @@ function Header({ isLoggedIn, setIsLoggedIn }) {
         )}
       </nav>
       
-      {isLoggedIn ? (
+      {isLoggedIn && (
         <button className="admin-button" onClick={handleLogout}>Logout</button>
-      ) : (
-        <a href="/admin-login" className="admin-button" onClick={(e) => handleNavigation('/admin-login', e)}>Admin Login</a>
       )}
     </header>
   );

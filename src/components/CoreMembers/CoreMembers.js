@@ -1,29 +1,29 @@
 import React, { useState, useEffect } from 'react';
 import Header from '../Header/Header';
-import { teamMembers as teamMembersAPI } from '../../services/supabase';
+import { coreMembers as coreMembersAPI } from '../../services/supabase';
 import './CoreMembers.css';
 import CoreTeamDetails from '../CoreTeamDetails/CoreTeamDetails';
 
 function CoreMembers() {
-  const [teamMembers, setTeamMembers] = useState([]);
+  const [coreMembers, setCoreMembers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchTeamMembers = async () => {
+    const fetchCoreMembers = async () => {
       try {
         setLoading(true);
-        const data = await teamMembersAPI.getAll();
-        setTeamMembers(data);
+        const data = await coreMembersAPI.getAll();
+        setCoreMembers(data);
         setLoading(false);
       } catch (err) {
-        setError('Failed to fetch team members');
+        setError('Failed to fetch core members');
         setLoading(false);
-        console.error('Error fetching team members:', err);
+        console.error('Error fetching core members:', err);
       }
     };
 
-    fetchTeamMembers();
+    fetchCoreMembers();
   }, []);
 
   return (
@@ -46,13 +46,13 @@ function CoreMembers() {
             <div className="spinner-loader">
               <div className="spinner-inner"></div>
             </div>
-            <p>Loading team members...</p>
+            <p>Loading core members...</p>
           </div>
         ) : error ? (
           <div className="error">{error}</div>
         ) : (
           <ul className="team-list">
-            {teamMembers.map((member) => (
+            {coreMembers.map((member) => (
               <li key={member.id} className="team-list-item">
                 <CoreTeamDetails member={member} />
               </li>
